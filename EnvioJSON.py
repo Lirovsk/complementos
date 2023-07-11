@@ -8,6 +8,7 @@ import sys
 class Lora:
     """Incialização do módulo com o retorno do objetivo já ativado"""
     RST = 22
+    DIO0 = 4
     GPIO.setup(RST, GPIO.OUT)
     FrequenciaSPI = 5000000
 
@@ -33,4 +34,10 @@ class Lora:
             sys.stderr.write("Mode <- %s\n" % MODE.lookup[mode])
         self.mode = mode
         return self.spi.xfer([REG.LORA.OP_MODE | 0x80, mode])[1]
-    
+    def escrita(self, payload):
+        """Escreve no módulo a lista de dados em bytes"""
+        tamanho_payload = len(payload)
+        if tamanho_payload > 4096:
+            raise ValueError("Payload too large (%d bytes)" % tamanho_payload)
+        self.def_mode(MODE.STDBY)
+        
