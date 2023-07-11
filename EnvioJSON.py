@@ -33,3 +33,4 @@ class Lora:
             sys.stderr.write("Mode <- %s\n" % MODE.lookup[mode])
         self.mode = mode
         return self.spi.xfer([REG.LORA.OP_MODE | 0x80, mode])[1]
+    
