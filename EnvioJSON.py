@@ -1,10 +1,10 @@
 # arquivo para enviar um pacote de dados JSON
-import serial 
 import time 
 import spidev
 import RPi.GPIO as GPIO
 import sys
-
+from constantes import *
+from tratamento_JSON import *
 class Lora:
     """Incialização do módulo com o retorno do objetivo já ativado"""
     RST = 22
@@ -36,8 +36,13 @@ class Lora:
         return self.spi.xfer([REG.LORA.OP_MODE | 0x80, mode])[1]
     def escrita(self, payload):
         """Escreve no módulo a lista de dados em bytes"""
-        tamanho_payload = len(payload)
+        byte_payload = json_to_bytes(payload)
+        tamanho_payload = len(byte_payload)
         if tamanho_payload > 4096:
             raise ValueError("Payload too large (%d bytes)" % tamanho_payload)
         self.def_mode(MODE.STDBY)
         
+        return self.spi.xfer([REG.LORA.FIFO | 0x80, tamanho_payload] + byte_payload)[1:]
+    def economia(self):
+        self.def_mode(MODE.SLEEP)
+    
