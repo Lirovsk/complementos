@@ -61,13 +61,13 @@ def setter(register_address):
 
 
 
-class Lora:
+class Lora(object):
     """Incialização do módulo com o retorno do objetivo já ativado"""
-    RST = 22
-    DIO0 = 4
-    DIO1 = 5
-    GPIO.setup(RST, GPIO.OUT)
-    FrequenciaSPI = 5000000
+    spi = BOARD.SpiDev()              # init and get the baord's SPI
+    mode = None                       # the mode is backed up here
+    backup_registers = []
+    verbose = True
+    dio_mapping = [None] * 6
 
     def __init__(self, verbose=True, do_calibration=False, calibration_freq=868):
         """ Init the object
