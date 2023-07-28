@@ -8,6 +8,8 @@ BOARD.SpiDev()
 
 lora = Lora()
 lora.set_mode(MODE.STDBY)
+lora.set_freq(915.0)
+
 #criação do pacote JSON para uma transmissão de testes
 dados = {
     "nome": "Joao",
