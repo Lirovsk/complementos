@@ -1,6 +1,6 @@
 # Esse é um código de teste para analisar a competencia da biblioteca criada
 from EnvioJSON import *
-import time 
+from time import sleep
 from BOARD import *
 
 BOARD.setup()
@@ -18,7 +18,9 @@ dados = {
 #transmissão do pacote JSON
 lora.set_freq(915.0)
 dados_tratados = json_to_bytes(dados)
-print(dados_tratados)
-lora.escrita(dados)
+while True:
+    print(dados_tratados)
+    lora.escrita(dados)
+    sleep(2)
 #Limpa do spi_bus para desligamento do sistema SPI
 lora.descanso()
