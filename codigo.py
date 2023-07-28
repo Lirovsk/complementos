@@ -18,6 +18,7 @@ dados = {
 #transmissão do pacote JSON
 lora.set_freq(915.0)
 dados_tratados = json_to_bytes(dados)
+print(dados_tratados)
 lora.escrita(dados)
 #Limpa do spi_bus para desligamento do sistema SPI
 lora.descanso()
