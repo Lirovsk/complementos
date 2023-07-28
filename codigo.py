@@ -9,13 +9,14 @@ BOARD.SpiDev()
 lora = Lora()
 lora.set_mode(MODE.STDBY)
 #criação do pacote JSON para uma transmissão de testes
-jsonString = "{";
-jsonString += "\"equipe\": 42,";
-jsonString += "\"bateria\": 62,";
-jsonString = "}";
-pacote = jsonString
+dados = {
+    "nome": "Joao",
+    "idade": 30,
+    "cidade": "Sao Paulo"
+}
+
 #transmissão do pacote JSON
 lora.set_freq(915.0)
-lora.escrita(pacote)
+lora.escrita(dados)
 #Limpa do spi_bus para desligamento do sistema SPI
 lora.descanso()
