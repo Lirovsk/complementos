@@ -8,7 +8,8 @@ BOARD.SpiDev()
 
 lora = Lora()
 lora.set_mode(MODE.STDBY)
-lora.set_freq(915.0)
+lora.set_freq(915.0)    
+lora.spi.xfer([REG.PA_DAC | 0x01, 0x84])
 
 #criação do pacote JSON para uma transmissão de testes
 dados = {
