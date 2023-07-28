@@ -169,7 +169,7 @@ class Lora(object):
         # DIO2 10: FhssChangeChannel
         self.on_fhss_change_channel()
 
-    def descanso():
+    def descanso(self):
         """limpa os dados do GPIO e fecha o objeto SpiDev"""
         GPIO.cleanup()
         Lora.spi.close()
