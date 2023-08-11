@@ -196,7 +196,7 @@ class Lora(object):
         base_addr = self.get_fifo_tx_base_addr()
         self.set_fifo_addr_ptr(base_addr)
         #return self.spi.xfer([REG.LORA.FIFO | 0x80, tamanho_payload] + list(byte_payload))[1:]
-        return self.spi.xfer([REG.LORA.FIFO | 0x80, len(payload)] + payload)[1:]
+        return self.spi.xfer([REG.LORA.FIFO | 0x80, len(payload)] + list(payload))[1:]
     
     def economia(self):
         self.def_mode(MODE.SLEEP)
