@@ -69,7 +69,7 @@ class Lora(object):
     verbose = True
     dio_mapping = [None] * 6
 
-    def __init__(self, verbose=True, do_calibration=True, calibration_freq=915):
+    def __init__(self, verbose=True, do_calibration=False, calibration_freq=915):
         """ Init the object
         
         Send the device to sleep, read all registers, and do the calibration (if do_calibration=True)
@@ -185,6 +185,7 @@ class Lora(object):
             sys.stderr.write("Mode <- %s\n" % MODE.lookup[mode])
         self.mode = mode
         return self.spi.xfer([REG.LORA.OP_MODE | 0x80, mode])[1]
+    
     def escrita(self, payload):
         """Escreve no módulo a lista de dados em bytes"""
         byte_payload = json_to_bytes(payload)
@@ -195,6 +196,7 @@ class Lora(object):
         base_addr = self.get_fifo_tx_base_addr()
         self.set_fifo_addr_ptr(base_addr)
         return self.spi.xfer([REG.LORA.FIFO | 0x80, tamanho_payload] + list(byte_payload))[1:]
+    
     def economia(self):
         self.def_mode(MODE.SLEEP)
     
@@ -217,6 +219,7 @@ class Lora(object):
             sys.stderr.write("Mode <- %s\n" % MODE.lookup[mode])
         self.mode = mode
         return self.spi.xfer([REG.LORA.OP_MODE | 0x80, mode])[1]
+    
     def reset_ptr_rx(self):
         """ Get FIFO ready for RX: Set FifoAddrPtr to FifoRxBaseAddr. The transceiver is put into STDBY mode. """
         self.set_mode(MODE.STDBY)
