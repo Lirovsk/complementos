@@ -105,7 +105,7 @@ class REG:
         OCP                = 0x0B
         LNA                = 0x0C
         FIFO_ADDR_PTR      = 0x0D
-        FIFO_TX_BASE_ADDR  = 0xBB
+        FIFO_TX_BASE_ADDR  = 0xFF
         FIFO_RX_BASE_ADDR  = 0xFF
         FIFO_RX_CURR_ADDR  = 0x10
         IRQ_FLAGS_MASK     = 0x11
