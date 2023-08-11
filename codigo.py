@@ -13,12 +13,12 @@ lora.set_freq(915.0)
 lora.spi.xfer([REG.LORA.PA_DAC | 0x01, 0x84])
 
 #criação do pacote JSON para uma transmissão de testes
-dados = {
+"""dados = {
     "nome": "Joao",
     "idade": 30,
     "cidade": "Sao Paulo"
-}
-
+}"""
+dados = "ola mundo"
 #transmissão do pacote JSON
 lora.set_freq(915.0)
 dados_tratados = json_to_bytes(dados)
