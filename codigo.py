@@ -2,6 +2,7 @@
 from EnvioJSON import *
 from time import sleep
 from BOARD import *
+from constantes import *
 
 BOARD.setup()
 BOARD.SpiDev()
