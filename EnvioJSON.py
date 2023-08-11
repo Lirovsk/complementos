@@ -188,14 +188,15 @@ class Lora(object):
     
     def escrita(self, payload):
         """Escreve no módulo a lista de dados em bytes"""
-        byte_payload = json_to_bytes(payload)
-        tamanho_payload = len(byte_payload)
-        if tamanho_payload > 4096:
-            raise ValueError("Payload too large (%d bytes)" % tamanho_payload)
+        #byte_payload = json_to_bytes(payload)
+        #tamanho_payload = len(byte_payload)
+        #if tamanho_payload > 4096:
+        #     raise ValueError("Payload too large (%d bytes)" % tamanho_payload)
         self.def_mode(MODE.STDBY)
         base_addr = self.get_fifo_tx_base_addr()
         self.set_fifo_addr_ptr(base_addr)
-        return self.spi.xfer([REG.LORA.FIFO | 0x80, tamanho_payload] + list(byte_payload))[1:]
+        #return self.spi.xfer([REG.LORA.FIFO | 0x80, tamanho_payload] + list(byte_payload))[1:]
+        return self.spi.xfer([REG.LORA.FIFO | 0x80, len(payload)] + payload)[1:]
     
     def economia(self):
         self.def_mode(MODE.SLEEP)
