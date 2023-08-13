@@ -5,7 +5,7 @@ import spidev
 def json_to_bytes(json_string):
     """Lê uma string JSON e retorna uma lista de bytes"""
     # Converte a string JSON para um objeto Python
-    obj_analisado= json.loads(json_string)
+    obj_analisado = json.dumps(json_string)
     # Converte o objeto Python para uma lista de bytes 
     return bytes(obj_analisado, 'utf-8')
 def bytes_to_json(bytes):

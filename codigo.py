@@ -1,21 +1,30 @@
 # Esse é um código de teste para analisar a competencia da biblioteca criada
 from EnvioJSON import *
-import time 
+from time import sleep
 from BOARD import *
+from constantes import *
 
 BOARD.setup()
 BOARD.SpiDev()
 
 lora = Lora()
 lora.set_mode(MODE.STDBY)
+lora.set_freq(915.0)    
+lora.spi.xfer([REG.LORA.PA_DAC | 0x01, 0x84])
+
 #criação do pacote JSON para uma transmissão de testes
-jsonString = "{";
-jsonString += "\"equipe\": 42,";
-jsonString += "\"bateria\": 62,";
-jsonString = "}";
-pacote = jsonString
+"""dados = {
+    "nome": "Joao",
+    "idade": 30,
+    "cidade": "Sao Paulo"
+}"""
+dados = "ola mundo"
 #transmissão do pacote JSON
 lora.set_freq(915.0)
-lora.escrita(pacote)
+dados_tratados = json_to_bytes(dados)
+while True:
+    print(dados_tratados)
+    lora.escrita(dados)
+    sleep(2)
 #Limpa do spi_bus para desligamento do sistema SPI
 lora.descanso()

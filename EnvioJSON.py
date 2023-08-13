@@ -69,7 +69,7 @@ class Lora(object):
     verbose = True
     dio_mapping = [None] * 6
 
-    def __init__(self, verbose=True, do_calibration=False, calibration_freq=868):
+    def __init__(self, verbose=True, do_calibration=False, calibration_freq=915):
         """ Init the object
         
         Send the device to sleep, read all registers, and do the calibration (if do_calibration=True)
@@ -169,7 +169,7 @@ class Lora(object):
         # DIO2 10: FhssChangeChannel
         self.on_fhss_change_channel()
 
-    def descanso():
+    def descanso(self):
         """limpa os dados do GPIO e fecha o objeto SpiDev"""
         GPIO.cleanup()
         Lora.spi.close()
@@ -185,16 +185,19 @@ class Lora(object):
             sys.stderr.write("Mode <- %s\n" % MODE.lookup[mode])
         self.mode = mode
         return self.spi.xfer([REG.LORA.OP_MODE | 0x80, mode])[1]
+    
     def escrita(self, payload):
         """Escreve no módulo a lista de dados em bytes"""
-        byte_payload = json_to_bytes(payload)
-        tamanho_payload = len(byte_payload)
-        if tamanho_payload > 4096:
-            raise ValueError("Payload too large (%d bytes)" % tamanho_payload)
+        #byte_payload = json_to_bytes(payload)
+        #tamanho_payload = len(byte_payload)
+        #if tamanho_payload > 4096:
+        #     raise ValueError("Payload too large (%d bytes)" % tamanho_payload)
         self.def_mode(MODE.STDBY)
         base_addr = self.get_fifo_tx_base_addr()
         self.set_fifo_addr_ptr(base_addr)
-        return self.spi.xfer([REG.LORA.FIFO | 0x80, tamanho_payload] + byte_payload)[1:]
+        #return self.spi.xfer([REG.LORA.FIFO | 0x80, tamanho_payload] + list(byte_payload))[1:]
+        return self.spi.xfer([REG.LORA.FIFO | 0x80, len(payload)] + list(payload))[1:]
+    
     def economia(self):
         self.def_mode(MODE.SLEEP)
     
@@ -217,6 +220,7 @@ class Lora(object):
             sys.stderr.write("Mode <- %s\n" % MODE.lookup[mode])
         self.mode = mode
         return self.spi.xfer([REG.LORA.OP_MODE | 0x80, mode])[1]
+    
     def reset_ptr_rx(self):
         """ Get FIFO ready for RX: Set FifoAddrPtr to FifoRxBaseAddr. The transceiver is put into STDBY mode. """
         self.set_mode(MODE.STDBY)
