@@ -18,9 +18,9 @@ class BOARD:
     LED  = 13   # RaspPi GPIO 13 connects to the LED and a resistor (1kohm or 330ohm)
     #SWITCH = 4  # RaspPi GPIO 4 connects to a switch - not necessary
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(DIO0, input)
-    GPIO.setup(DIO1, input)
-    GPIO.setup(DIO2, input)
+    GPIO.setup(4 , input)
+    GPIO.setup(17 , input)
+    GPIO.setup(18 , input)
     # The spi object is kept here
     spi = None
     SPI_BUS=0
