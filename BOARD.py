@@ -17,7 +17,7 @@ class BOARD:
     RST  = 22   # RaspPi GPIO 22
     LED  = 13   # RaspPi GPIO 13 connects to the LED and a resistor (1kohm or 330ohm)
     #SWITCH = 4  # RaspPi GPIO 4 connects to a switch - not necessary
-    
+    GPIO.setmode(GPIO.BCM)
     # The spi object is kept here
     spi = None
     SPI_BUS=0
@@ -75,6 +75,7 @@ class BOARD:
 
     @staticmethod
     def add_events(cb_dio0, cb_dio1, cb_dio2, switch_cb=None):
+        GPIO.setmode(GPIO.BCM)
         BOARD.add_event_detect(BOARD.DIO0, callback=cb_dio0)
         BOARD.add_event_detect(BOARD.DIO1, callback=cb_dio1)
         BOARD.add_event_detect(BOARD.DIO2, callback=cb_dio2)
