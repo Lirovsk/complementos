@@ -3,10 +3,6 @@ from EnvioJSON import *
 from time import sleep
 from BOARD import *
 from constantes import *
-import EnvioJSON
-
-BOARD.setup()
-BOARD.SpiDev()
 
 lora = Lora()
 lora.__init__
