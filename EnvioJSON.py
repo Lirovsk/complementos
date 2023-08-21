@@ -195,8 +195,10 @@ class Lora(object):
         self.def_mode(MODE.STDBY)
         base_addr = self.get_fifo_tx_base_addr()
         self.set_fifo_addr_ptr(base_addr)
+        payload_analisada = json.dumps(payload)
+        dados = bytes(payload_analisada, 'utf-8')
         #return self.spi.xfer([REG.LORA.FIFO | 0x80, tamanho_payload] + list(byte_payload))[1:]
-        return self.spi.xfer([REG.LORA.FIFO | 0x80, len(payload)] + list(payload))[1:]
+        return self.spi.xfer([REG.LORA.FIFO | 0x80, len(payload)] + list(dados))[1:]
     
     def economia(self):
         self.def_mode(MODE.SLEEP)

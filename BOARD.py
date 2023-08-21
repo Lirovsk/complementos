@@ -1,7 +1,8 @@
 import RPi.GPIO as GPIO
 import spidev
-
+from constantes import *
 import time
+from EnvioJSON import *
 
 
 class BOARD:
@@ -10,7 +11,7 @@ class BOARD:
         This is the Raspberry Pi board with one LED and a Ra-02 Lora.
     """
     # Note that the BCOM numbering for the GPIOs is used.
-    DIO0 = 4   # RaspPi GPIO 4
+    DIO0 = 8   # RaspPi GPIO 4
     DIO1 = 17   # RaspPi GPIO 17
     DIO2 = 18   # RaspPi GPIO 27
     RST  = 22   # RaspPi GPIO 22
@@ -90,3 +91,45 @@ class BOARD:
         GPIO.output(BOARD.RST, 1)
         time.sleep(.01)
         return 0
+    
+    def __init__(self, verbose=False, do_calibration=False, calibration_freq=868):
+        """ Init the object
+        
+        Send the device to sleep, read all registers, and do the calibration (if do_calibration=True)
+        :param verbose: Set the verbosity True/False
+        :param calibration_freq: call rx_chain_calibration with this parameter. Default is 868
+        :param do_calibration: Call rx_chain_calibration, default is False.
+        """
+        self.verbose = verbose
+        # set the callbacks for DIO0..5 IRQs.
+        BOARD.add_events(self._dio0, self._dio1, self._dio2)
+        # set mode to sleep and read all registers
+        self.set_mode(MODE.SLEEP)
+        self.backup_registers = self.get_all_registers()
+        # more setup work:
+        if do_calibration:
+            self.rx_chain_calibration(calibration_freq)
+        # the FSK registers are set up exactly as modtronix do it:
+        lookup_fsk = [
+            #[REG.FSK.LNA            , 0x23],
+            #[REG.FSK.RX_CONFIG      , 0x1E],
+            #[REG.FSK.RSSI_CONFIG    , 0xD2],
+            #[REG.FSK.PREAMBLE_DETECT, 0xAA],
+            #[REG.FSK.OSC            , 0x07],
+            #[REG.FSK.SYNC_CONFIG    , 0x12],
+            #[REG.FSK.SYNC_VALUE_1   , 0xC1],
+            #[REG.FSK.SYNC_VALUE_2   , 0x94],
+            #[REG.FSK.SYNC_VALUE_3   , 0xC1],
+            #[REG.FSK.PACKET_CONFIG_1, 0xD8],
+            #[REG.FSK.FIFO_THRESH    , 0x8F],
+            #[REG.FSK.IMAGE_CAL      , 0x02],
+            #[REG.FSK.DIO_MAPPING_1  , 0x00],
+            #[REG.FSK.DIO_MAPPING_2  , 0x30]
+        ]
+        self.set_mode(MODE.FSK_STDBY)
+        for register_address, value in lookup_fsk:
+            self.set_register(register_address, value)
+        self.set_mode(MODE.SLEEP)
+        # set the dio_ mapping by calling the two get_dio_mapping_* functions
+        self.get_dio_mapping_1()
+        self.get_dio_mapping_2()

@@ -3,27 +3,28 @@ from EnvioJSON import *
 from time import sleep
 from BOARD import *
 from constantes import *
+import EnvioJSON
 
 BOARD.setup()
 BOARD.SpiDev()
 
 lora = Lora()
+lora.__init__
 lora.set_mode(MODE.STDBY)
 lora.set_freq(915.0)    
+lora.set_fifo_tx_base_addr(0xFF)
 lora.spi.xfer([REG.LORA.PA_DAC | 0x01, 0x84])
 
 #criação do pacote JSON para uma transmissão de testes
-"""dados = {
+dados = {
     "nome": "Joao",
     "idade": 30,
     "cidade": "Sao Paulo"
-}"""
-dados = "ola mundo"
+}
+#dados = "ola mundo"
 #transmissão do pacote JSON
-lora.set_freq(915.0)
-dados_tratados = json_to_bytes(dados)
 while True:
-    print(dados_tratados)
+    print(dados)
     lora.escrita(dados)
     sleep(2)
 #Limpa do spi_bus para desligamento do sistema SPI
