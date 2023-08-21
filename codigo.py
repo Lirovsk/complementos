@@ -5,6 +5,7 @@ from BOARD import *
 from constantes import *
 
 lora = Lora()
+BOARD.setup()
 lora.__init__
 lora.set_mode(MODE.STDBY)
 lora.set_freq(915.0)    
